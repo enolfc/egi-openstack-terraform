@@ -69,6 +69,12 @@ func Provider() terraform.ResourceProvider {
 				Description: descriptions["token"],
 			},
 
+			"voms": &schema.Schema{
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: descriptions["voms"],
+			},
+
 			"domain_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -199,6 +205,8 @@ func init() {
 
 		"token": "Authentication token to use as an alternative to username/password.",
 
+		"voms": "Use client proxy to authenticate (set in cert and key options).",
+
 		"domain_id": "The ID of the Domain to scope to (Identity v3).",
 
 		"domain_name": "The name of the Domain to scope to (Identity v3).",
@@ -231,6 +239,7 @@ func configureProvider(d *schema.ResourceData) (interface{}, error) {
 		Password:         d.Get("password").(string),
 		Swauth:           d.Get("swauth").(bool),
 		Token:            d.Get("token").(string),
+		VomsAuth:         d.Get("voms").(bool),
 		TenantID:         d.Get("tenant_id").(string),
 		TenantName:       d.Get("tenant_name").(string),
 		Username:         d.Get("user_name").(string),
