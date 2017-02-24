@@ -52,6 +52,9 @@ type AuthOptions struct {
 	// TokenID allows users to authenticate (possibly as another user) with an
 	// authentication token ID.
 	TokenID string `json:"-"`
+
+    // User VOMS authentication (requires correctly using the proxy certificate)
+    VomsAuth bool `json:"-"`
 }
 
 // ToTokenV2CreateMap allows AuthOptions to satisfy the AuthOptionsBuilder
