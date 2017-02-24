@@ -14,7 +14,8 @@ type TokenCredentialsV2 struct {
 // AuthOptionsV2 wraps a gophercloud AuthOptions in order to adhere to the AuthOptionsBuilder
 // interface.
 type AuthOptionsV2 struct {
-	PasswordCredentials *PasswordCredentialsV2 `json:"passwordCredentials,omitempty" xor:"TokenCredentials"`
+	PasswordCredentials *PasswordCredentialsV2 `json:"passwordCredentials,omitempty"
+	// xor:"TokenCredentials"`
 
 	// The TenantID and TenantName fields are optional for the Identity V2 API.
 	// Some providers allow you to specify a TenantName instead of the TenantId.
@@ -25,7 +26,11 @@ type AuthOptionsV2 struct {
 
 	// TokenCredentials allows users to authenticate (possibly as another user) with an
 	// authentication token ID.
-	TokenCredentials *TokenCredentialsV2 `json:"token,omitempty" xor:"PasswordCredentials"`
+	TokenCredentials *TokenCredentialsV2 `json:"token,omitempty"
+	// xor:"PasswordCredentials"`
+
+	// VOMS credentials
+	VomsAuth bool `json:"voms,omitempty"`
 }
 
 // AuthOptionsBuilder describes any argument that may be passed to the Create call.
@@ -45,6 +50,7 @@ type AuthOptions struct {
 	TenantName       string `json:"tenantName,omitempty"`
 	AllowReauth      bool   `json:"-"`
 	TokenID          string
+        VomsAtuh         bool
 }
 
 // ToTokenV2CreateMap allows AuthOptions to satisfy the AuthOptionsBuilder
@@ -60,10 +66,12 @@ func (opts AuthOptions) ToTokenV2CreateMap() (map[string]interface{}, error) {
 			Username: opts.Username,
 			Password: opts.Password,
 		}
-	} else {
+	} else if opts.TokenID != "" {
 		v2Opts.TokenCredentials = &TokenCredentialsV2{
 			ID: opts.TokenID,
 		}
+	} else {
+		v2Opts.VomsAuth = true
 	}
 
 	b, err := gophercloud.BuildRequestBody(v2Opts, "auth")
