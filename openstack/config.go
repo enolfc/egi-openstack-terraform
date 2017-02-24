@@ -29,6 +29,7 @@ type Config struct {
 	Token            string
 	Username         string
 	UserID           string
+	VomsAuth         bool
 
 	osClient *gophercloud.ProviderClient
 }
@@ -62,6 +63,7 @@ func (c *Config) loadAndValidate() error {
 		TokenID:          c.Token,
 		Username:         c.Username,
 		UserID:           c.UserID,
+		VomsAuth:         c.VomsAuth,
 	}
 
 	client, err := openstack.NewClient(ao.IdentityEndpoint)
