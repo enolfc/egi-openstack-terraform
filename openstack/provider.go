@@ -72,6 +72,7 @@ func Provider() terraform.ResourceProvider {
 			"voms": &schema.Schema{
 				Type:        schema.TypeBool,
 				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("OS_VOMS", ""),
 				Description: descriptions["voms"],
 			},
 
